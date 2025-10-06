@@ -3,9 +3,11 @@ package com.frankmoley.lil;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 import com.frankmoley.lil.data.dao.CustomerDao;
 import com.frankmoley.lil.data.dao.ServiceDao;
+import com.frankmoley.lil.data.dao.SimpleProductDao;
 import com.frankmoley.lil.data.entity.Customer;
 import com.frankmoley.lil.data.entity.Service;
 
@@ -81,5 +83,16 @@ public class App {
 
         System.out.println("*** LIST");
         customers.forEach(System.out::println);          
+
+        System.out.println("**************************************************");
+        System.out.println("*** SIMPLE PRODUCT ***");
+        System.out.println("**************************************************");
+
+        SimpleProductDao spdao = new SimpleProductDao();
+        UUID productId = spdao.createProduct(
+            "foobarbaz" + System.currentTimeMillis(), 
+            new BigDecimal(45.6),
+            "Jaloo");
+        System.out.println(productId);
     }
 }
