@@ -23,6 +23,7 @@ public class CustomerDao  implements Dao<Customer,UUID> {
     private static final String CREATE = "insert into wisdom.customers (customer_id, first_name, last_name, email, phone, address) values(?,?,?,?,?,?)";
     private static final String UPDATE = "update wisdom.customers set first_name = ?, last_name = ?, email = ?, phone = ?, address = ? where customer_id = ?";
     private static final String DELETE = "delete from wisdom.customers where customer_id = ?";
+    private static final String GET_ALL_PAGE = "select customer_id, first_name, last_name, email, phone, address from wisdom.customers order by last_name, first_name limit ? offset ?";
 
     @Override
     public Customer create(Customer entity) {
@@ -82,6 +83,22 @@ public class CustomerDao  implements Dao<Customer,UUID> {
         try (Statement statement = connection.createStatement()) {
             ResultSet rs = statement.executeQuery(GET_ALL);
             customers = this.processResultSet(rs);
+        } catch (SQLException e) {
+            DatabaseUtils.handleSQLException("CustomerDao.getAll", e, LOGGER);
+        }
+        return customers;
+    }
+
+    public List<Customer> getAllPaged(int pageNumber, int limit) {
+        List<Customer> customers = new ArrayList<>();
+        Connection connection = DatabaseUtils.getConnection();
+        int offset = ((pageNumber -1) * limit);
+        try (PreparedStatement statement = connection.prepareStatement(GET_ALL_PAGE)) {
+            statement.setInt(1,limit);
+            statement.setInt(2,offset);
+            ResultSet rs = statement.executeQuery();
+            customers = this.processResultSet(rs);
+            rs.close();
         } catch (SQLException e) {
             DatabaseUtils.handleSQLException("CustomerDao.getAll", e, LOGGER);
         }

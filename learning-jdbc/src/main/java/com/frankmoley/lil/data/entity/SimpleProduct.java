@@ -1,6 +1,7 @@
 package com.frankmoley.lil.data.entity;
 
 import java.math.BigDecimal;
+import java.util.UUID;
 
 public class SimpleProduct {
 

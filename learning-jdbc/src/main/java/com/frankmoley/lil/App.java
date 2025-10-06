@@ -1,20 +1,14 @@
 package com.frankmoley.lil;
 
-import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
-
 import com.frankmoley.lil.data.dao.CustomerDao;
-import com.frankmoley.lil.data.dao.ServiceDao;
-import com.frankmoley.lil.data.dao.SimpleProductDao;
 import com.frankmoley.lil.data.entity.Customer;
-import com.frankmoley.lil.data.entity.Service;
 
 
 public class App {
     public static void main(String[] args) {
-                
+/*
         System.out.println("**************************************************");
         System.out.println("*** SERVICES ***");
         System.out.println("**************************************************");
@@ -50,7 +44,7 @@ public class App {
         
         System.out.println("*** LIMIT ***");
         serviceDao.getAllLimit(2).forEach(System.out::println);
-/*
+*/
         System.out.println("**************************************************");
         System.out.println("*** CUSTOMERS ***");
         System.out.println("**************************************************");
@@ -82,11 +76,22 @@ public class App {
 
         System.out.println("*** DELETE");
         System.out.println(newCustomer);
-        serviceDao.delete(newCustomer.getCustomerId());        
+        customerDao.delete(newCustomer.getCustomerId());        
 
         System.out.println("*** LIST");
         customers.forEach(System.out::println);          
 
+        System.out.println("*** PAGED");      
+        int size = customerDao.getAll().size();
+        int limit = 10;        
+        int totalPages = (int) Math.ceil((double) size / limit);
+        for (int i = 1; i <= totalPages; i++) {        
+            System.out.println("Page number: " + i);
+            customerDao.getAllPaged(i,limit).forEach(System.out::println);    
+        }
+        System.out.println("Size: " + size );          
+
+/*
         System.out.println("**************************************************");
         System.out.println("*** SIMPLE PRODUCT ***");
         System.out.println("**************************************************");
