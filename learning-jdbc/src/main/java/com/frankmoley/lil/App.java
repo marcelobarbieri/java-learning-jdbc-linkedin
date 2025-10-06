@@ -1,5 +1,6 @@
 package com.frankmoley.lil;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 
@@ -21,5 +22,13 @@ public class App {
         System.out.println("*** GET ONE");
         Optional<Service> service = serviceDao.getOne(services.get(0).getServiceId());
         System.out.println(service.get());
+
+        System.out.println("*** CREATE");
+        Service newService = new Service();
+        newService.setName("FooBarBaz" + System.currentTimeMillis());
+        newService.setPrice(new BigDecimal(4.35));
+        newService = serviceDao.create(newService);
+        System.out.println(newService);
+
     }
 }

@@ -19,13 +19,37 @@ import com.frankmoley.lil.data.util.DatabaseUtils;
 public class ServiceDao implements Dao<Service,UUID> {
 
     private static final Logger LOGGER = Logger.getLogger(ServiceDao.class.getName());
+    
     private static final String GET_ALL = "select service_id, name, price from wisdom.services";
     private static final String GET_BY_ID = "select service_id, name, price from wisdom.services where service_id = ?";
+    private static final String CREATE = "insert into wisdom.services (service_id, name, price) values(?,?,?)";
 
     @Override
     public Service create(Service entity) {
-        // TODO Auto-generated method stub
-        return null;
+        
+        UUID serviceId = UUID.randomUUID();
+        Connection connection = DatabaseUtils.getConnection();
+        try {
+            connection.setAutoCommit(false);
+            PreparedStatement statement = connection.prepareStatement(CREATE);            
+            statement.setObject(1,serviceId);
+            statement.setObject(2, entity.getName());
+            statement.setBigDecimal(3, entity.getPrice());            
+            statement.execute();
+            connection.commit();
+            statement.close();
+        } catch (SQLException e1) {
+            try {
+                connection.rollback();
+            } catch (SQLException e2) {
+                DatabaseUtils.handleSQLException("ServiceDao.create.rollback", e2, LOGGER);
+            }
+            DatabaseUtils.handleSQLException("ServiceDao.create", e1, LOGGER);
+        }
+        Optional<Service> service = this.getOne(serviceId);
+        if (!service.isPresent())
+            return null;
+        return service.get();
     }
 
     @Override
