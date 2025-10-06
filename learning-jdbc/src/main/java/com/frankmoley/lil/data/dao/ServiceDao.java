@@ -11,8 +11,6 @@ import java.util.Optional;
 import java.util.UUID;
 import java.util.logging.Logger;
 
-import javax.naming.spi.DirStateFactory.Result;
-
 import com.frankmoley.lil.data.entity.Service;
 import com.frankmoley.lil.data.util.DatabaseUtils;
 
@@ -23,6 +21,7 @@ public class ServiceDao implements Dao<Service,UUID> {
     private static final String GET_ALL = "select service_id, name, price from wisdom.services";
     private static final String GET_BY_ID = "select service_id, name, price from wisdom.services where service_id = ?";
     private static final String CREATE = "insert into wisdom.services (service_id, name, price) values(?,?,?)";
+    private static final String UPDATE = "update wisdom.services set name = ?, price = ? where service_id = ?";
 
     @Override
     public Service create(Service entity) {
@@ -54,7 +53,7 @@ public class ServiceDao implements Dao<Service,UUID> {
 
     @Override
     public void delete(UUID id) {
-        // TODO Auto-generated method stub
+        
         
     }
 
@@ -88,8 +87,27 @@ public class ServiceDao implements Dao<Service,UUID> {
 
     @Override
     public Service update(Service entity) {
-        // TODO Auto-generated method stub
-        return null;
+        
+        Connection connection = DatabaseUtils.getConnection();
+        
+        try {
+            connection.setAutoCommit(false);
+            PreparedStatement statement = connection.prepareStatement(UPDATE);
+            statement.setString(1, entity.getName());
+            statement.setBigDecimal(2, entity.getPrice());
+            statement.setObject(3, entity.getServiceId());
+            statement.execute();
+            connection.commit();
+            statement.close();
+        } catch (SQLException e1) {
+            try {
+                connection.rollback();
+            } catch (SQLException e2) {
+                DatabaseUtils.handleSQLException("ServiceDao.update.rollback", e2, LOGGER);
+            }
+            DatabaseUtils.handleSQLException("ServiceDao.update", e1, LOGGER);
+        }
+        return this.getOne(entity.getServiceId()).get();
     }
 
 
