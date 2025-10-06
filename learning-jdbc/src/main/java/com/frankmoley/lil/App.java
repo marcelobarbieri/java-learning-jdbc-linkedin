@@ -35,5 +35,12 @@ public class App {
         newService = serviceDao.update(newService);
         System.out.println(newService);
 
+        System.out.println("*** DELETE");
+        System.out.println(newService);
+        serviceDao.delete(newService.getServiceId());
+
+        System.out.println("*** LIST");
+        services.forEach(System.out::println);        
+
     }
 }
