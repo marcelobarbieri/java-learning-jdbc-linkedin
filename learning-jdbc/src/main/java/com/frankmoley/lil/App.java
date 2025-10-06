@@ -46,8 +46,11 @@ public class App {
         serviceDao.delete(newService.getServiceId());
 
         System.out.println("*** LIST");
-        services.forEach(System.out::println);        
-
+        services.forEach(System.out::println);   
+        
+        System.out.println("*** LIMIT ***");
+        serviceDao.getAllLimit(2).forEach(System.out::println);
+/*
         System.out.println("**************************************************");
         System.out.println("*** CUSTOMERS ***");
         System.out.println("**************************************************");
@@ -88,11 +91,14 @@ public class App {
         System.out.println("*** SIMPLE PRODUCT ***");
         System.out.println("**************************************************");
 
+        System.out.println("*** CREATE ***");
         SimpleProductDao spdao = new SimpleProductDao();
         UUID productId = spdao.createProduct(
             "foobarbaz" + System.currentTimeMillis(), 
             new BigDecimal(45.6),
             "Jaloo");
         System.out.println(productId);
+*/
+        
     }
 }
