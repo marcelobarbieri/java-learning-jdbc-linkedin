@@ -7,8 +7,8 @@ import java.util.logging.Logger;
 
 
 public class DatabaseUtils {
-
-    private static final String URL = "jdbc:postresql://localhost:5432/localdb";
+    
+    private static final String URL = "jdbc:postgresql://localhost:5432/localdb";
     private static final String USERNAME = "localdbuser";
     private static final String PASSWORD = "P@ssw0rd!";
     private static final Logger LOGGER = Logger.getLogger(DatabaseUtils.class.getName());

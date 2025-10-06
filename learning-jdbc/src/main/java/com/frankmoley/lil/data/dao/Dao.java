@@ -8,8 +8,8 @@ public interface Dao <T, Id extends UUID> {
 
     List<T> getAll();
     T create(T entity);
-    Optional<T> getOne(Id id);
+    Optional<T> getOne(UUID id);
     T update(T entity);
-    void delete(Id id);
+    void delete(UUID id);
 
 }
